@@ -27,6 +27,17 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+    @ExceptionHandler(StudentAlreadyExistException.class)
+    public ResponseEntity<ErrorResponseDto> handleStudentAlreadyExist(StudentAlreadyExistException ex, HttpServletRequest request){
+        ErrorResponseDto errorResponse= new ErrorResponseDto(
+                LocalDateTime.now(),
+                HttpStatus.OK.value(),
+                HttpStatus.CONFLICT.getReasonPhrase(),
+                ex.getMessage(),
+                request.getRequestURI()
+        );
+        return ResponseEntity.status(HttpStatus.OK).body(errorResponse);
+    }
 
     //for validation
     @ExceptionHandler(MethodArgumentNotValidException.class)

@@ -26,6 +26,7 @@ public class StudentService {
 
     public Student saveStudent(CreateStudentDto createStudentDto) {
         Student student = new Student();
+        student.setStudentId(createStudentDto.getStudentId());
         student.setFirstName(createStudentDto.getFirstName());
         student.setLastName(createStudentDto.getLastName());
         student.setEmail(createStudentDto.getEmail());

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 public class CreateStudentDto {
+    private String studentId;
 
     @NotBlank(message = "First name is required")
     @Size(min = 2, max = 30, message = "First name must be between 2 and 30 characters")
