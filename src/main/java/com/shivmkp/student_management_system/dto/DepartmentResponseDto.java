@@ -1,13 +1,23 @@
 package com.shivmkp.student_management_system.dto;
 
+import lombok.*;
+
 import java.time.LocalDateTime;
 
-public class DepartmentDto {
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder
+public class DepartmentResponseDto {
+
     private Long id;
-    private String departmentCode;
-    private String departmentName;
+
+    private String name;
+
+    private String code;
+
     private String description;
-    private Boolean isActive;
+
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

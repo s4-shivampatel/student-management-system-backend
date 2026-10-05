@@ -2,8 +2,6 @@ package com.shivmkp.student_management_system.dto;
 
 import com.shivmkp.student_management_system.enums.UserRole;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
@@ -12,16 +10,15 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class CreateUserDto {
+public class UpdateUserDto {
 
-    @NotBlank
     @Size(max = 50)
     private String username;
 
-    @NotBlank
     private String password;
 
-    @NotNull
     private UserRole role;
+
+    private Boolean enabled;
 
 }

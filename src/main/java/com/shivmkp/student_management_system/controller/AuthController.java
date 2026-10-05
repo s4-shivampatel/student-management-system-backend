@@ -1,12 +1,9 @@
 package com.shivmkp.student_management_system.controller;
-
-
 import com.shivmkp.student_management_system.dto.LoginRequestDto;
 import com.shivmkp.student_management_system.utils.JwtUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -29,11 +26,11 @@ public class AuthController {
     public ResponseEntity<?> studentLogin(@RequestBody LoginRequestDto loginRequest){
         Authentication authentication=authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getStudentId(),
+                        loginRequest.getUsename(),
                         loginRequest.getPassword()
                 )
         );
-        String token=jwtUtil.generateToken(loginRequest.getStudentId());
+        String token=jwtUtil.generateToken(loginRequest.getUsename());
         return ResponseEntity.ok(token);
     }
 

@@ -9,9 +9,9 @@ import java.util.List;
 
 @Entity
 @Table(
-        name = "teachers",
+        name = "courses",
         uniqueConstraints = {
-                @UniqueConstraint(columnNames = "email")
+                @UniqueConstraint(columnNames = "code")
         }
 )
 @Getter
@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Teacher {
+public class Course {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,14 +28,14 @@ public class Teacher {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 100)
-    private String email;
+    @Column(nullable = false, unique = true, length = 20)
+    private String code;
 
-    @Column(length = 15)
-    private String phone;
+    @Column(nullable = false)
+    private Integer credits;
 
-    @Column(length = 50)
-    private String designation;
+    @Column(columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -45,21 +45,36 @@ public class Teacher {
         createdAt = LocalDateTime.now();
     }
 
-    //<------RELATIONS----->
+
+    //<-----RELATIONS----->
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @OneToMany(
-            mappedBy = "teacher",
+            mappedBy = "course",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @Builder.Default
     private List<CourseTeacher> courseTeachers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "markedBy")
+    @OneToMany(mappedBy = "course")
     @Builder.Default
-    private List<Attendance> attendancesMarked = new ArrayList<>();
+    private List<Enrollment> enrollments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "course")
+    @Builder.Default
+    private List<Attendance> attendances = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "course",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private List<Exam> exams = new ArrayList<>();
+
+
 
 }

@@ -1,24 +1,23 @@
 package com.shivmkp.student_management_system.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-import java.time.LocalDateTime;
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class CreateDepartmentDto {
 
-    @NotBlank(message = "Department code is Required")
-    private String departmentCode;
     @NotBlank(message = "Department name is required")
-    private String departmentName;
-    @NotBlank(message = "Description is required")
+    @Size(max = 100, message = "Department name must not exceed 100 characters")
+    private String name;
+
+    @NotBlank(message = "Department code is required")
+    @Size(max = 20, message = "Department code must not exceed 20 characters")
+    private String code;
+
     private String description;
-    @NotNull(message = "Status is required")
-    private Boolean isActive;
 }

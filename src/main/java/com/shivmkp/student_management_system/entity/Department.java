@@ -1,33 +1,57 @@
 package com.shivmkp.student_management_system.entity;
 
-
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
+@Entity
+@Table(
+        name = "departments",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "code")
+        }
+)
 @Getter
 @Setter
-@Entity
-@Table(name = "departments")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Department {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String departmentCode;
-    private String departmentName;
-    private String description;
-    private Boolean isActive;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
+    @Column(nullable = false, length = 100)
+    private String name;
+
+    @Column(nullable = false, unique = true, length = 20)
+    private String code;
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    //<-----RELATIONS----->
+    @OneToMany(mappedBy = "department")
+    @Builder.Default
+    private List<Student> students = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department")
+    @Builder.Default
+    private List<Course> courses = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department")
+    @Builder.Default
+    private List<Teacher> teachers = new ArrayList<>();
 }

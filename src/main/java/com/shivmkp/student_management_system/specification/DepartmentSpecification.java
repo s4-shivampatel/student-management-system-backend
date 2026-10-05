@@ -6,32 +6,55 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class DepartmentSpecification {
-    public static Specification<Department> filter(FilterDepartmentDto filterDepartmentDto){
-        return (root,query,cb)->{
-            List<Predicate> predicates=new ArrayList<>();
-            if(filterDepartmentDto.getDepartmentCode()!=null){
+
+    public static Specification<Department> filter(
+            FilterDepartmentDto filterDepartmentDto
+    ) {
+
+        return (root, query, cb) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Filter by department name
+            if (filterDepartmentDto.getName() != null
+                    && !filterDepartmentDto.getName().isBlank()) {
+
                 predicates.add(
                         cb.like(
-                                cb.lower(root.get("departmentCode")),
-                                "%"+filterDepartmentDto.getDepartmentCode().toLowerCase()+"%"
+                                cb.lower(root.get("name")),
+                                "%" + filterDepartmentDto.getName().toLowerCase() + "%"
                         )
                 );
             }
-            if(filterDepartmentDto.getIsActive()!=null){
-                predicates.add(
-                        cb.equal(
-                                (root.get("isActive")),
-                                filterDepartmentDto.getIsActive()
-                        )
-                );
-            }
-            return cb.and(predicates.toArray(new Predicate[0]));
 
+            // Filter by department code
+            if (filterDepartmentDto.getCode() != null
+                    && !filterDepartmentDto.getCode().isBlank()) {
+
+                predicates.add(
+                        cb.like(
+                                cb.lower(root.get("code")),
+                                "%" + filterDepartmentDto.getCode().toLowerCase() + "%"
+                        )
+                );
+            }
+
+            // Filter by description
+//            if (filterDepartmentDto.getDescription() != null
+//                    && !filterDepartmentDto.getDescription().isBlank()) {
+//
+//                predicates.add(
+//                        cb.like(
+//                                cb.lower(root.get("description")),
+//                                "%" + filterDepartmentDto.getDescription().toLowerCase() + "%"
+//                        )
+//                );
+//            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
 }

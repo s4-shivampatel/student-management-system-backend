@@ -7,12 +7,15 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
-public class FilterStudentDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class StudentResponseDto {
+
+    private Long id;
     private String studentId;
     private String rollNumber;
 
@@ -30,7 +33,12 @@ public class FilterStudentDto {
 
     private Long departmentId;
 
+    private String departmentName;
+
     private Integer batchYear;
 
     private String status;
+
+    private LocalDateTime createdAt;
 }
+

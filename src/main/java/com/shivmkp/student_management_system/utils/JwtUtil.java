@@ -1,6 +1,7 @@
 package com.shivmkp.student_management_system.utils;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Component;
@@ -18,19 +19,19 @@ public class JwtUtil {
     private SecretKey getSigningKey(){
         return Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
-    public String generateToken(String studentId){
+    public String generateToken(String username){
         Map<String,Object> claims=new HashMap<>();
-        return createToken(claims,studentId);
+        return createToken(claims,username);
     }
 
-    private String createToken(Map<String, Object> claims, String studentId) {
+    private String createToken(Map<String, Object> claims, String username) {
         return Jwts.builder()
                 //<-----HEADER----->
                 .header().empty().add("typ","JWT")
                 .and()
                 //<-----PAYLOAD----->
                 .claims(claims)
-                .subject(studentId)
+                .subject(username)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+(1000*60*60*24)))
                 //<-----SIGNATURE----->
@@ -45,7 +46,7 @@ public class JwtUtil {
                 .parseSignedClaims(token)
                 .getPayload();
     }
-    public String extractStudentId(String token){
+    public String extractUsername(String token){
         Claims claims=extractAllClaims(token);
         return claims.getSubject();
     }
@@ -55,7 +56,11 @@ public class JwtUtil {
     public Boolean isTokenExpired(String token){
         return extractAllClaims(token).getExpiration().before(new Date());
     }
-    public Boolean validateToken(String token){
-        return !isTokenExpired(token);
+    public Boolean validateToken(String token) {
+        try {
+            return !isTokenExpired(token);
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 }
